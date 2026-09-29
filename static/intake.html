@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BizWare — опрос</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Manrope:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/styles.css" />
+    <!--
+      Cloudflare Turnstile. Подгружается всегда; виджет рендерится только если
+      data-sitekey не пустой (флаг проставляется через шаблон).
+    -->
+    <script
+      src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+      async
+      defer
+    ></script>
+  </head>
+  <body class="intake landing">
+    <header class="site-header">
+      <a class="logo" href="/intake">BizWare</a>
+      <div id="lang-toggle-slot"></div>
+    </header>
+
+    <main class="intake-page">
+      <h1 data-i18n="intake.page.title">Расскажите о себе</h1>
+
+      <div id="form-error" class="error-message" role="alert"></div>
+
+      <form class="intake-form" id="intake-form" novalidate>
+        <div class="field">
+          <label for="name" data-i18n="intake.q1.label">Как могу к вам обращаться?</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            autocomplete="given-name"
+            required
+            minlength="1"
+            data-i18n-placeholder="intake.q1.placeholder"
+          />
+        </div>
+
+        <div class="field">
+          <label for="email" data-i18n="intake.q2.label">Email</label>
+          <span class="hint" data-i18n="intake.q2.hint"
+            >оставьте email — и через 5 минут у вас будет готов план</span
+          >
+          <input
+            type="email"
+            id="email"
+            name="email"
+            autocomplete="email"
+            required
+            data-i18n-placeholder="intake.q2.placeholder"
+          />
+        </div>
+
+        <div class="field">
+          <span class="field-label" data-i18n="intake.q3.label">Сколько вам лет?</span>
+          <div class="options">
+            <label><input type="radio" name="age_range" value="<25" required /><span data-i18n="intake.q3.opt1">до 25</span></label>
+            <label><input type="radio" name="age_range" value="25-35" /><span data-i18n="intake.q3.opt2">25–35</span></label>
+            <label><input type="radio" name="age_range" value="35-45" /><span data-i18n="intake.q3.opt3">35–45</span></label>
+            <label><input type="radio" name="age_range" value="45-55" /><span data-i18n="intake.q3.opt4">45–55</span></label>
+            <label><input type="radio" name="age_range" value="55+" /><span data-i18n="intake.q3.opt5">55 и старше</span></label>
+          </div>
+        </div>
+
+        <div class="field">
+          <span class="field-label" data-i18n="intake.q4.label">Какой у вас пол?</span>
+          <div class="options">
+            <label><input type="radio" name="gender" value="female" required /><span data-i18n="intake.q4.opt1">женский</span></label>
+            <label><input type="radio" name="gender" value="male" /><span data-i18n="intake.q4.opt2">мужской</span></label>
+            <label><input type="radio" name="gender" value="not_specified" /><span data-i18n="intake.q4.opt3">пропустить</span></label>
+          </div>
+        </div>
+
+        <div class="field">
+          <span class="field-label" data-i18n="intake.q5.label">Чем ваш бизнес занимается?</span>
+          <div class="options">
+            <label><input type="radio" name="sector" value="services" required /><span data-i18n="intake.q5.opt1">услуги (мастер, репетитор, консультант)</span></label>
+            <label><input type="radio" name="sector" value="goods" /><span data-i18n="intake.q5.opt2">товары / магазин</span></label>
+            <label><input type="radio" name="sector" value="online_education" /><span data-i18n="intake.q5.opt3">онлайн-курсы / инфопродукт</span></label>
+            <label><input type="radio" name="sector" value="production" /><span data-i18n="intake.q5.opt4">производство / ремесло</span></label>
+            <label><input type="radio" name="sector" value="b2b" /><span data-i18n="intake.q5.opt5">услуги для других бизнесов (b2b)</span></label>
+            <label><input type="radio" name="sector" value="other" /><span data-i18n="intake.q5.opt6">другое</span></label>
+          </div>
+        </div>
+
+        <div class="field">
+          <span class="field-label" data-i18n="intake.q6.label"
+            >Что у вас сейчас съедает больше всего времени?</span
+          >
+          <div class="options">
+            <label><input type="radio" name="time_eater" value="client_comms" required /><span data-i18n="intake.q6.opt1">общение с клиентами</span></label>
+            <label><input type="radio" name="time_eater" value="sales" /><span data-i18n="intake.q6.opt2">продажи и переговоры</span></label>
+            <label><input type="radio" name="time_eater" value="production" /><span data-i18n="intake.q6.opt3">сама работа / производство</span></label>
+            <label><input type="radio" name="time_eater" value="admin" /><span data-i18n="intake.q6.opt4">документы, отчёты, рутина</span></label>
+            <label><input type="radio" name="time_eater" value="marketing" /><span data-i18n="intake.q6.opt5">маркетинг и привлечение</span></label>
+            <label><input type="radio" name="time_eater" value="other" /><span data-i18n="intake.q6.opt6">другое</span></label>
+          </div>
+        </div>
+
+        <!-- Turnstile widget. JS подмешивает sitekey из /api/config; если ключ не
+             задан в env — виджет не рендерится, бэк пропустит verify. -->
+        <div id="turnstile-widget"></div>
+
+        <button type="submit" class="cta" id="submit-btn" data-i18n="intake.submit">
+          Пройти опрос и получить решение сегодня
+        </button>
+      </form>
+    </main>
+
+    <script src="/static/i18n.js"></script>
+    <script src="/static/intake.js"></script>
+  </body>
+</html>

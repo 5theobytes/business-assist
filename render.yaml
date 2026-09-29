@@ -1,0 +1,46 @@
+services:
+  - type: web
+    name: bizware
+    runtime: python
+    plan: free
+    region: frankfurt
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: WORKFLOW
+        value: v2
+      - key: ANTHROPIC_MODEL
+        value: claude-sonnet-4-6
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: GCP_PROJECT_ID
+        sync: false
+      - key: GCP_CLIENT_EMAIL
+        sync: false
+      - key: GCP_PRIVATE_KEY
+        sync: false
+      - key: GCP_PRIVATE_KEY_ID
+        sync: false
+      - key: FIRESTORE_DATABASE
+        sync: false
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: TELEGRAM_WEBHOOK_SECRET
+        sync: false
+      - key: ADMIN_TOKEN
+        sync: false
+      # Cloudflare Turnstile — опциональны. Если оба пусты, капча на /intake
+      # отключена (verify пропускается, форма работает как есть).
+      - key: TURNSTILE_SITE_KEY
+        sync: false
+      - key: TURNSTILE_SECRET_KEY
+        sync: false
+      # Google Sheets — ID целевой таблицы. Если задан, бот синхронизирует
+      # все сессии в Sheets (онлайн, после каждой сессии, debounced ~30с).
+      # Сервис-аккаунту из GCP_* нужен Editor-доступ к таблице.
+      - key: GOOGLE_SHEETS_ID
+        sync: false

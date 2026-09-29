@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BizWare — диалог</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Hind+Madurai:wght@400;500;600&family=Inter:wght@400;500&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Montserrat:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body class="chat-page">
+    <header class="site-header">
+      <a class="logo" href="/">BizWare</a>
+      <div id="mode-toggle-slot"></div>
+      <div id="lang-toggle-slot"></div>
+    </header>
+
+    <main class="chat-shell">
+      <section class="chat" id="chat" aria-live="polite"></section>
+
+      <form class="composer" id="composer">
+        <textarea
+          id="input"
+          name="message"
+          rows="3"
+          autocomplete="off"
+          required
+          data-i18n-placeholder="chat.input.placeholder"
+        >Ваш ответ…</textarea>
+        <details class="comment-toggle">
+          <summary data-i18n="chat.comment.toggle">Хочу оставить комментарий о вопросе</summary>
+          <textarea
+            id="comment"
+            name="comment"
+            rows="2"
+            autocomplete="off"
+            data-i18n-placeholder="chat.comment.placeholder"
+          >Что-то непонятно в вопросе, бот забыл что-то, или просто заметка для нас — напишите здесь</textarea>
+        </details>
+        <button type="submit" id="send" data-i18n="chat.send_button">Отправить</button>
+      </form>
+
+      <footer class="footer">
+        <span id="status" data-i18n="chat.status.connecting">Подключаюсь…</span>
+      </footer>
+    </main>
+
+    <script src="/static/i18n.js"></script>
+    <script>
+      // Mount mode toggle + lang toggle
+      (function () {
+        var modeSlot = document.getElementById("mode-toggle-slot");
+        if (window.i18n && window.i18n.mountModeToggle) {
+          window.i18n.mountModeToggle(modeSlot);
+        }
+        var langSlot = document.getElementById("lang-toggle-slot");
+        if (window.i18n && window.i18n.mountLangToggle) {
+          window.i18n.mountLangToggle(langSlot);
+        }
+        // On mode change to journey, redirect
+        document.addEventListener("modechange", function (e) {
+          if (e.detail && e.detail.mode === "journey") {
+            var params = new URLSearchParams(window.location.search);
+            var sid = params.get("sid") || "";
+            window.location.href = "/journey?sid=" + encodeURIComponent(sid);
+          }
+        });
+      })();
+    </script>
+    <script src="/static/app.js"></script>
+  </body>
+</html>

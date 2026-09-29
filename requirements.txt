@@ -1,0 +1,31 @@
+fastapi==0.115.0
+starlette<1.0
+uvicorn[standard]==0.32.0
+anthropic==1.9.0
+google-genai==2.0.0
+google-cloud-firestore==2.19.0
+google-cloud-speech==2.27.0
+gspread==6.1.4
+google-api-python-client==2.149.0
+httpx==0.28.1
+python-dotenv==1.0.1
+pydantic==2.9.2
+
+# Testing & CI
+pytest==8.3.3
+pytest-cov==6.0.0
+pytest-xdist==3.5.0
+coverage[toml]==7.6.4
+
+# Type checking
+mypy==1.13.0
+types-requests==2.32.0.20241016
+
+# Linting & formatting
+flake8==7.1.1
+black==24.10.0
+isort==5.13.2
+
+# Security scanning
+bandit==1.8.0
+safety==3.2.11

@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BizWare — путь</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Hind+Madurai:wght@400;500;600&family=Inter:wght@400;500&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Montserrat:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/styles.css" />
+    <link rel="stylesheet" href="/static/journey.css" />
+  </head>
+  <body class="journey-page">
+    <header class="site-header">
+      <a class="logo" href="/">BizWare</a>
+      <div id="mode-toggle-slot"></div>
+      <div id="lang-toggle-slot"></div>
+    </header>
+
+    <main class="journey-shell">
+      <!-- Phase indicator bar -->
+      <div class="journey-phases" id="journey-phases">
+        <div class="journey-phase" data-phase="point_a">
+          <span class="journey-phase__dot"></span>
+          <span class="journey-phase__label" data-i18n="journey.phase.point_a">Point A</span>
+        </div>
+        <div class="journey-phase" data-phase="point_b">
+          <span class="journey-phase__dot"></span>
+          <span class="journey-phase__label" data-i18n="journey.phase.point_b">Point B</span>
+        </div>
+        <div class="journey-phase" data-phase="resources">
+          <span class="journey-phase__dot"></span>
+          <span class="journey-phase__label" data-i18n="journey.phase.resources">Resources</span>
+        </div>
+        <div class="journey-phase" data-phase="analysis">
+          <span class="journey-phase__dot"></span>
+          <span class="journey-phase__label" data-i18n="journey.phase.analysis">Analysis</span>
+        </div>
+        <div class="journey-phase" data-phase="dev_coverage">
+          <span class="journey-phase__dot"></span>
+          <span class="journey-phase__label" data-i18n="journey.phase.dev_coverage">Details</span>
+        </div>
+        <div class="journey-phase" data-phase="spec_review">
+          <span class="journey-phase__dot"></span>
+          <span class="journey-phase__label" data-i18n="journey.phase.spec_review">Review</span>
+        </div>
+      </div>
+
+      <!-- Horizontal scrollable path -->
+      <div class="journey-viewport" id="journey-viewport">
+        <div class="journey-path" id="journey-path">
+          <!-- Point A anchor -->
+          <div class="journey-anchor" id="point-a">
+            <div class="journey-anchor__node" aria-label="Point A">A</div>
+            <span class="journey-anchor__label" data-i18n="journey.point_a"></span>
+          </div>
+
+          <!-- Steps will be injected dynamically -->
+
+          <!-- Point B anchor -->
+          <div class="journey-anchor" id="point-b" style="display:none">
+            <div class="journey-anchor__node" id="point-b-node" aria-label="Point B">B</div>
+            <span class="journey-anchor__label" data-i18n="journey.point_b"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Status bar -->
+      <div class="journey-status" id="journey-status">
+        <span id="status-text"></span>
+      </div>
+    </main>
+
+    <script src="/static/i18n.js"></script>
+    <script src="/static/journey.js"></script>
+  </body>
+</html>

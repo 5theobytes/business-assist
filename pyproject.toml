@@ -1,0 +1,74 @@
+[project]
+name = "bizware"
+version = "0.1.0"
+description = "BizWare - AI-powered business workflow automation"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = [
+    "-v",
+    "--strict-markers",
+    "--tb=short",
+]
+markers = [
+    "integration: marks tests as integration tests (deselect with '-m \"not integration\"')",
+    "requires_anthropic: marks tests that call the Anthropic API",
+    "requires_firestore: marks tests that write to Firestore",
+    "requires_google_speech: marks tests that call Google Cloud Speech-to-Text",
+    "slow: marks tests as slow-running",
+]
+
+[tool.coverage.run]
+source = ["app"]
+branch = true
+omit = [
+    "app/__pycache__/*",
+    "app/eval/*",
+    "app/workflows/v4_clarity.py",
+    "app/workflows/v2_adaptive.py",
+    "tmp/*",
+]
+
+[tool.coverage.report]
+fail_under = 80
+show_missing = true
+skip_empty = true
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if __name__ == .__main__.",
+    "raise NotImplementedError",
+    "pass",
+    "\\.\\.\\.",
+    "if TYPE_CHECKING:",
+]
+
+[tool.coverage.html]
+directory = "htmlcov"
+
+[tool.coverage.xml]
+output = "coverage.xml"
+
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+
+[tool.flake8]
+max-line-length = 100
+extend-ignore = ["E203", "W503"]
+exclude = [
+    ".git",
+    "__pycache__",
+    "tmp",
+    "eval_runs",
+    "htmlcov",
+    ".venv",
+]
+
+[tool.bandit]
+exclude_dirs = ["tests", "tmp", "eval_runs"]
+skips = ["B101"]  # assert used in tests
+
+[tool.mypy]
+# See mypy.ini for full configuration

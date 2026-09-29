@@ -1,0 +1,591 @@
+/* =====================================================================
+   JOURNEY MODE — horizontal path visualization
+   Pearly-blue palette with subtle texture
+   ===================================================================== */
+
+:root {
+  --j-bg: #D6E8F0;
+  --j-bg-texture: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 2px,
+    rgba(255, 255, 255, 0.12) 2px,
+    rgba(255, 255, 255, 0.12) 4px
+  );
+  --j-text: #1B3A5C;
+  --j-text-muted: #4A6B8A;
+  --j-path-color: #4A90C4;
+  --j-surface: #FFFFFF;
+  --j-border: #B8D4E8;
+  --j-node-size: 20px;
+  --j-accent: #2E7D9B;
+  --j-accent-hover: #1F5F7A;
+  --j-cross-color: #8B4513;
+  --j-done-color: #2E7D32;
+}
+
+body.journey-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--j-bg);
+  background-image: var(--j-bg-texture);
+  color: var(--j-text);
+}
+
+body.journey-page .site-header {
+  background: var(--j-bg);
+  border-bottom: 1px solid var(--j-border);
+}
+
+body.journey-page .logo {
+  color: var(--j-text);
+}
+
+body.journey-page .logo:hover {
+  color: var(--j-accent);
+}
+
+/* ── Phase indicator bar ─────────────────────────────────────────────── */
+
+.journey-phases {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  padding: 16px 32px 8px;
+  flex-shrink: 0;
+}
+
+.journey-phase {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.journey-phase__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--j-path-color);
+  background: transparent;
+  transition: background 0.3s, border-color 0.3s;
+}
+
+.journey-phase--active .journey-phase__dot {
+  background: var(--j-accent);
+  border-color: var(--j-accent);
+}
+
+.journey-phase--completed .journey-phase__dot {
+  background: var(--j-done-color);
+  border-color: var(--j-done-color);
+}
+
+.journey-phase__label {
+  font-family: "Montserrat", sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--j-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  transition: color 0.3s, font-weight 0.3s;
+}
+
+.journey-phase--active .journey-phase__label {
+  font-weight: 700;
+  color: var(--j-accent);
+}
+
+/* ── Main layout ─────────────────────────────────────────────────────── */
+
+.journey-shell {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 100%;
+  padding: 24px 32px 0;
+  overflow: hidden;
+}
+
+.journey-viewport {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 32px 0;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.journey-path {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  min-width: max-content;
+  padding: 16px 32px;
+  position: relative;
+}
+
+/* ── Anchor nodes (Point A / Point B) ────────────────────────────────── */
+
+.journey-anchor {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  min-width: 160px;
+  max-width: 200px;
+  flex-shrink: 0;
+}
+
+.journey-anchor__node {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 3px solid var(--j-path-color);
+  background: var(--j-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--j-path-color);
+  transition: background 0.3s, color 0.3s;
+}
+
+.journey-anchor__node--completed {
+  background: var(--j-done-color);
+  border-color: var(--j-done-color);
+  color: #fff;
+}
+
+.journey-anchor__label {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--j-text);
+  text-align: center;
+  white-space: normal;
+  max-width: 180px;
+  line-height: 1.3;
+}
+
+.journey-anchor__desc {
+  font-size: 11px;
+  color: var(--j-text-muted);
+  text-align: center;
+  white-space: normal;
+  max-width: 180px;
+  line-height: 1.4;
+}
+
+/* ── Connector line ──────────────────────────────────────────────────── */
+
+.journey-connector {
+  width: 48px;
+  height: 3px;
+  background: var(--j-path-color);
+  flex-shrink: 0;
+  border-radius: 2px;
+}
+
+.journey-connector--long {
+  width: 64px;
+}
+
+/* ── Step cards ──────────────────────────────────────────────────────── */
+
+.journey-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.journey-step__node {
+  width: var(--j-node-size);
+  height: var(--j-node-size);
+  border-radius: 50%;
+  border: 3px solid var(--j-path-color);
+  background: var(--j-surface);
+  flex-shrink: 0;
+  transition: background 0.3s;
+}
+
+.journey-step__node--filled {
+  background: var(--j-path-color);
+}
+
+.journey-step__card {
+  background: var(--j-surface);
+  border: 1px solid var(--j-border);
+  border-radius: 12px;
+  padding: 16px;
+  min-width: 180px;
+  max-width: 260px;
+  box-shadow: 0 2px 8px rgba(27, 58, 92, 0.08);
+  white-space: normal;
+  position: relative;
+  transition: max-width 0.3s ease, border-color 0.3s, box-shadow 0.3s;
+}
+
+.journey-step__question {
+  font-family: "Inter", sans-serif;
+  font-size: 13px;
+  color: var(--j-text-muted);
+  line-height: 1.45;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--j-border);
+}
+
+.journey-step__answer {
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--j-text);
+  line-height: 1.4;
+}
+
+.journey-step__label {
+  font-family: "Montserrat", sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--j-text-muted);
+}
+
+/* ── Options in step ─────────────────────────────────────────────────── */
+
+.journey-step__options {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.journey-step__option {
+  font-size: 13px;
+  line-height: 1.4;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--j-border);
+  background: var(--j-surface);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, transform 0.15s;
+  font-family: "Inter", sans-serif;
+  color: var(--j-text);
+  text-align: left;
+  width: 100%;
+}
+
+.journey-step__option:hover:not(:disabled):not(.journey-step__option--selected):not(.journey-step__option--rejected) {
+  border-color: var(--j-accent);
+  background: rgba(46, 125, 155, 0.06);
+  transform: scale(1.01);
+}
+
+.journey-step--active .journey-step__option {
+  padding: 8px 12px;
+}
+
+.journey-step__option--selected {
+  border-color: var(--j-accent);
+  background: rgba(46, 125, 155, 0.1);
+  font-weight: 500;
+  cursor: default;
+}
+
+.journey-step__option--rejected {
+  opacity: 0.5;
+  cursor: default;
+  text-decoration: line-through;
+  color: var(--j-text-muted);
+}
+
+.journey-step__option--rejected::after {
+  content: " \2715";
+  color: var(--j-cross-color);
+  font-weight: 600;
+  margin-left: 4px;
+}
+
+.journey-step__option--sending {
+  animation: pulse-opacity 1.2s infinite;
+}
+
+@keyframes pulse-opacity {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* ── Inline input ────────────────────────────────────────────────────── */
+
+.journey-step__inline-input {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.journey-step__input {
+  flex: 1;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--j-border);
+  background: var(--j-surface);
+  color: var(--j-text);
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.journey-step__input:focus {
+  border-color: var(--j-accent);
+}
+
+.journey-step__input::placeholder {
+  color: var(--j-text-muted);
+  opacity: 0.7;
+}
+
+.journey-step__input-send {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: var(--j-accent);
+  color: #fff;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+
+.journey-step__input-send:hover:not(:disabled) {
+  background: var(--j-accent-hover);
+}
+
+/* ── Undo button ─────────────────────────────────────────────────────── */
+
+.journey-step__undo {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--j-text-muted);
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s, background 0.15s;
+  padding: 0;
+}
+
+.journey-step:hover .journey-step__undo {
+  opacity: 1;
+}
+
+.journey-step__undo:hover {
+  background: var(--j-accent);
+  color: #fff;
+}
+
+.journey-step--active .journey-step__undo {
+  display: none;
+}
+
+/* ── Active step (waiting for input) ─────────────────────────────────── */
+
+.journey-step--active .journey-step__card {
+  border-color: var(--j-accent);
+  box-shadow: 0 2px 12px rgba(46, 125, 155, 0.15);
+  max-width: 300px;
+}
+
+.journey-step--active .journey-step__node {
+  border-color: var(--j-accent);
+  animation: pulse-node 2s infinite;
+}
+
+@keyframes pulse-node {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(74, 144, 196, 0.3); }
+  50% { box-shadow: 0 0 0 6px rgba(74, 144, 196, 0); }
+}
+
+/* ── Loading state ───────────────────────────────────────────────────── */
+
+.journey-step--loading .journey-step__card {
+  animation: pulse-card 1.5s infinite;
+}
+
+@keyframes pulse-card {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* ── Done state ──────────────────────────────────────────────────────── */
+
+.journey-step--done .journey-step__card {
+  opacity: 0.6;
+  border-color: var(--j-border);
+  box-shadow: none;
+}
+
+.journey-step--done .journey-step__node {
+  border-color: var(--j-done-color);
+  background: var(--j-done-color);
+}
+
+/* ── Status bar ──────────────────────────────────────────────────────── */
+
+.journey-status {
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--j-text-muted);
+  padding: 4px 0 8px;
+  font-family: "Inter", sans-serif;
+}
+
+.journey-status.error {
+  color: #c2392c;
+}
+
+/* ── Empty state ─────────────────────────────────────────────────────── */
+
+.journey-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  color: var(--j-text-muted);
+  font-size: 14px;
+  font-style: italic;
+}
+
+/* ── Clarity score indicators ─────────────────────────────────────────── */
+
+.journey-score {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 0.75rem;
+  color: var(--j-text);
+}
+
+.journey-score__label {
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+.journey-score__bar {
+  flex: 1;
+  height: 4px;
+  background: rgba(74, 144, 196, 0.2);
+  border-radius: 2px;
+  overflow: hidden;
+  min-width: 60px;
+}
+
+.journey-score__fill {
+  height: 100%;
+  background: var(--j-path-color);
+  border-radius: 2px;
+  transition: width 0.4s ease;
+  width: 0%;
+}
+
+.journey-score__value {
+  font-weight: 500;
+  min-width: 32px;
+  text-align: right;
+}
+
+/* ── Checkpoint step ─────────────────────────────────────────────────── */
+
+.journey-step--checkpoint .journey-step__card {
+  border: 2px solid var(--j-path-color);
+  background: rgba(74, 144, 196, 0.08);
+  position: relative;
+}
+
+.journey-step__checkpoint-badge {
+  display: inline-block;
+  background: var(--j-path-color);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.journey-step--checkpoint .journey-step__node {
+  border-color: var(--j-path-color);
+  box-shadow: 0 0 0 3px rgba(74, 144, 196, 0.2);
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────── */
+
+@media (max-width: 720px) {
+  .journey-shell {
+    padding: 16px 12px 0;
+  }
+
+  .journey-phases {
+    gap: 12px;
+    padding: 12px 16px 4px;
+  }
+
+  .journey-phase__label {
+    font-size: 9px;
+  }
+
+  .journey-path {
+    padding: 12px 16px;
+  }
+
+  .journey-anchor {
+    min-width: 120px;
+    max-width: 150px;
+  }
+
+  .journey-step__card {
+    min-width: 150px;
+    max-width: 220px;
+    padding: 12px;
+  }
+
+  .journey-step--active .journey-step__card {
+    max-width: 260px;
+  }
+
+  .journey-connector {
+    width: 32px;
+  }
+
+  .journey-connector--long {
+    width: 40px;
+  }
+}

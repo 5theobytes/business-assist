@@ -1,0 +1,25 @@
+.env
+.env.*
+!.env.example
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.pytest_cache/
+.DS_Store
+tests/fixtures/voice_test.ogg
+
+# Local credentials and generated artifacts.
+oauth_token.json
+oauth_client.json
+eval_runs/
+tmp/
+.claude/scheduled_tasks.lock
+.claude/settings.local.json
+.claude/projects/
+gcp-sa-*.json
+.coverage
+coverage.xml
+htmlcov/
